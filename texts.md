@@ -14,6 +14,8 @@ where
 - At alpha = 0.05, our t value is greater than the critical t value (2.4 > 2.093).
 - Thus, we reject H0, and say that uni A’s students have significantly different IQ than 100. (And because 108.1 > 100, we say it’s higher than 100.)
 
+![ttable](/images/week3/ttable.png)
+
 ### Do it in R
 
 1. Prepare data
@@ -50,3 +52,21 @@ sample estimates:
 mean of x 
     108.1
 ```
+
+
+
+
+### Reporting statistics 
+
+Statistical tests need to be reported once the data have been analysed (usually in a short paragraph) 
+
+### Basic framework for the reporting:
+
+- Statistical test that was performed 
+- The measures that were compared (with the different levels if there are any) 
+- The means and standard deviations
+- Significant or non-significant? 
+- Specific test value – in this case the t-statistic (in later weeks, the F-value, X², r) 
+- Degrees of freedom – convention dictates that these are placed in rounded parentheses 
+- The specific p-value taken from R
+- (confidence intervals/effect size) 
