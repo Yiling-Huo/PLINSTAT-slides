@@ -17,145 +17,14 @@
 		<div class="reveal">
 			<div class="slides">
 				<section data-markdown>
-					## Week 3
-					### T-tests and degrees of freedom
+					## PLINSTAT: Introduction to Statistics for Linguists using R
 
-					---
+					[Week 3 slides](https://yiling-huo.github.io/PLINSTAT-slides/week3/)
 
-					### So far: 
+					[Week 4 slides](https://yiling-huo.github.io/PLINSTAT-slides/week4/)
 
-					- Null hypothesis & alternative hypothesis
-					- Normal distribution
-					- Mean and s.d.
-					- SEM and CI
-
+					[Week 5 slides](https://yiling-huo.github.io/PLINSTAT-slides/week5/)
 				</section>
-				<section>
-					<h3>Type I and Type II errors</h3>
-
-					<p>Four possible outcomes of null hypothesis testing</p>
-
-					<!-- #013300 for dark theme correct -->
-					<!-- #680100 for dark theme wrong -->
-					<style type="text/css">
-					.tg  {border-collapse:collapse;border-spacing:0;}
-					.tg td{border-color:inherit;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-					overflow:hidden;padding:10px 5px;word-break:normal;}
-					.tg th{border-color:inherit;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-					font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-					.tg .tg-xckt{background-color:#9aff99;border-color:inherit;font-size:28px;text-align:center;vertical-align:top} 
-					.tg .tg-5crt{border-color:inherit;font-size:28px;text-align:center;vertical-align:top}
-					.tg .tg-mxfm{background-color:#ffccc9;border-color:inherit;font-size:28px;font-weight:bold;text-align:center;vertical-align:top}
-					</style>
-					<table class="tg">
-					<thead>
-					<tr>
-						<th class="tg-5crt" colspan="2" rowspan="2"></th>
-						<th class="tg-5crt" colspan="2">our decision</th>
-					</tr>
-					<tr>
-						<th class="tg-5crt">H0 is NOT rejected</th>
-						<th class="tg-5crt">H0 is rejected</th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr>
-						<td class="tg-5crt" rowspan="2">the null hypothesis is really...</td>
-						<td class="tg-5crt">true</td>
-						<td class="tg-xckt">correct</td>
-						<td class="tg-mxfm">Type I error (false positive)</td>
-					</tr>
-					<tr>
-						<td class="tg-5crt">false</td>
-						<td class="tg-mxfm">Type II error (false negative)</td>
-						<td class="tg-xckt">correct</td>
-					</tr>
-					</tbody>
-					</table>
-				</section>
-				<section>
-					<h3>Example: Covid tests</h3>
-					<ul><!-- style="list-style-type: none;" -->
-						<li>What's the null hypothesis?
-							<ul>
-								<li class="fragment">Person doesn't have Covid</li>
-							</ul>
-						</li>
-						<li class="fragment">What's the alternative hypothesis?
-							<ul>
-								<li class="fragment">Person has Covid</li>
-							</ul>
-						</li>
-						<li class="fragment">Two ways to go wrong
-							<ul>
-								<li class="fragment">Test says positive when the person doesn't have Covid (Type I, false positive)</li>
-								<li class="fragment">Test says negative when the person has Covid (Type II, false negative)</li>
-							</ul>
-						</li>
-					</ul>
-				</section>
-				<section data-markdown>
-					## One sample t-test
-				</section>
-				<section>
-					<h3>One sample t-test</h3>
-					<p>The one sample t-test: is an unknown population mean different from a specific value?</p>
-					<ul>
-						<li class="fragment">Example: The average IQ is 100, by design. A professor wants to know whether the average IQ of students from university A is different from 100.
-							<ul>
-								<li class="fragment">here, population = where we collect data = university A</li>
-							</ul>
-						</li>
-					</ul>
-				</section>
-				<section>
-					<h3>When to use the one sample t-test</h3>
-					<ul>
-						<li class="fragment">To compare a group of scores to a specified constant.</li>
-						<li class="fragment">Scale variables (interval or ratio scores).</li>
-						<li class="fragment">Population and sample are normally distributed.</li>
-					</ul>
-				</section>
-				<section>
-					<h3>One sample t-test example</h3>
-					<p>Test whether students from university A have an average IQ which differ from 100.</p>
-					<ul>
-						<li class="fragment">Twenty students randomly selected from university A took the IQ test. </li>
-						<li class="fragment"><font size="5.5">The IQ scores: 117 125 116 113 102 122 123 93 99 129 132 94 85 92 101 83 119 119 101 97 (mean = 108.1)</font></li>
-						<li class="fragment">Null hypothesis: no difference between sample mean and 100. (i.e. H0: µ=100)</li>
-						<li class="fragment">Alternative hypothesis: there is a difference between sample mean and 100. (i.e. H1: µ≠100)</li>
-					</ul>
-				</section>
-				<section>
-					<h4>How to test: <strong>the standard error of the mean</strong></h4>
-					<blockquote>
-						<p>How confident are we that 108.1 represent the average IQ of all students from uni A (population mean)?</p>
-					</blockquote>
-				</section>
-				<section>
-					<h3>The standard error of the mean (SEM)</h3>
-					<p>Imagine picking out 20 students randomly from uni A and calculating their mean</p>
-					<ul>
-						<li class="fragment">The value of the mean is likely to be different every time</li>
-						<li class="fragment">Now do this 100 times, and construct a histogram of the mean value</li>
-						<li class="fragment">The standard deviation of this distribution is the SEM</li>
-					</ul>
-					<p><font size="5.5">An animation: <a href="https://onlinestatbook.com/stat_sim/sampling_dist/">Sampling Distributions</a></font></p>
-				</section>
-				<section>
-					<h3>Calculating the SEM from one experiment</h3>
-					<ul>
-						<li class="fragment">We never do the experiment lots of times</li>
-						<li class="fragment">But we can estimate the SEM from our one experiment</li>
-						<li class="fragment">
-							To calculate the SEM from one experiment:
-							<p>
-								\[ SEM = \frac{s.d.}{\sqrt{n}} \]
-							</p>
-						</li>
-					</ul>
-				</section>
-
 			</div>
 		</div>
 
