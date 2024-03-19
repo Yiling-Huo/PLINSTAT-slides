@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>PLINSTAT</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/white-less-cap.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-markdown>
+					## Week 4
+					### Analysis of Variance (ANOVA) and Effect Sizes
+				</section>
+				<section>
+					<h3>Type I and Type II errors</h3>
+
+					<p>Four possible outcomes of null hypothesis testing</p>
+
+					<!-- #013300 for dark theme correct -->
+					<!-- #680100 for dark theme wrong -->
+					<style type="text/css">
+					.tg  {border-collapse:collapse;border-spacing:0;}
+					.tg td{border-color:inherit;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+					overflow:hidden;padding:10px 5px;word-break:normal;}
+					.tg th{border-color:inherit;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+					font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+					.tg .tg-xckt{background-color:#9aff99;border-color:inherit;font-size:28px;text-align:center;vertical-align:top} 
+					.tg .tg-5crt{border-color:inherit;font-size:28px;text-align:center;vertical-align:top}
+					.tg .tg-mxfm{background-color:#ffccc9;border-color:inherit;font-size:28px;font-weight:bold;text-align:center;vertical-align:top}
+					</style>
+					<table class="tg">
+					<thead>
+					<tr>
+						<th class="tg-5crt" colspan="2" rowspan="2"></th>
+						<th class="tg-5crt" colspan="2">our decision</th>
+					</tr>
+					<tr>
+						<th class="tg-5crt">H0 is NOT rejected</th>
+						<th class="tg-5crt">H0 is rejected</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="tg-5crt" rowspan="2">the null hypothesis is really...</td>
+						<td class="tg-5crt">true</td>
+						<td class="tg-xckt">correct</td>
+						<td class="tg-mxfm">Type I error (false positive)</td>
+					</tr>
+					<tr>
+						<td class="tg-5crt">false</td>
+						<td class="tg-mxfm">Type II error (false negative)</td>
+						<td class="tg-xckt">correct</td>
+					</tr>
+					</tbody>
+					</table>
+				</section>
+				<section>
+					<h3>Example: Covid tests</h3>
+					<ul><!-- style="list-style-type: none;" -->
+						<li>What's the null hypothesis?
+							<ul>
+								<li class="fragment">Person doesn't have Covid</li>
+							</ul>
+						</li>
+						<li class="fragment">What's the alternative hypothesis?
+							<ul>
+								<li class="fragment">Person has Covid</li>
+							</ul>
+						</li>
+						<li class="fragment">Two ways to go wrong
+							<ul>
+								<li class="fragment">Test says positive when the person doesn't have Covid (Type I, false positive)</li>
+								<li class="fragment">Test says negative when the person has Covid (Type II, false negative)</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section data-markdown data-auto-animate data-auto-animate-id="01">
+					## One sample t-test
+				</section>
+				<section data-markdown data-auto-animate data-auto-animate-id="01">
+					## One sample t-test
+
+					The one sample t-test: is an unknown population mean different from a specific value?
+				</section>
+				<section>
+					<h3>When to use the one sample t-test</h3>
+					<ul>
+						<li class="fragment">To compare a group of scores to a specified constant.</li>
+						<li class="fragment">Scale variables (interval or ratio scores).</li>
+						<li class="fragment">Population and sample are normally distributed.</li>
+					</ul>
+				</section>
+				<section>
+					<h3>One sample t-test example</h3>
+					<p>Test whether students from university A have an average IQ which differ from 100.</p>
+				</section>
+				<section>
+					<h3>The standard error of the mean (SEM)</h3>
+					<p>Imagine picking out 20 students randomly from uni A and calculating their mean</p>
+					<ul>
+						<li class="fragment">The value of the mean is likely to be different every time</li>
+						<li class="fragment">Now do this 100 times, and construct a histogram of the mean value</li>
+						<li class="fragment">The standard deviation of this distribution is the SEM</li>
+					</ul>
+					<p><font size="5.5">An animation: <a href="https://onlinestatbook.com/stat_sim/sampling_dist/">Sampling Distributions</a></font></p>
+				</section>
+				<section>
+					<h3>Calculating the SEM from one experiment</h3>
+					<ul>
+						<li class="fragment">
+							To calculate the SEM from one experiment:
+							<p>
+								\[ SEM = \frac{s.d.}{\sqrt{n}} \]
+							</p>
+						</li>
+					</ul>
+				</section>
+                <section>
+                    <h3>One sample t-test: How many SEM units is our estimate from 100?</h3>
+                    <p>\[ t = \frac{\bar{x}-\mu}{SEM} \] </p>
+                    <ul style="list-style-type: none;">
+                        <li>Our t = 2.4, in other words, our sample is 2.4 SEM units from the hypothetical mean.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Is 2.4 units good enough?</h3>
+                    <p><img src="ttable.png" alt="ttable"></p>
+                </section>
+                <section>
+                    <h3 id="do-it-in-r">Do it in R: One sample t-test</h3>
+                    <p style="text-align: left;">1. Prepare data</p>
+                    <p style="text-align: left;">2. Test for normality</p>
+                    <pre><code class="language-r" data-noescape data-trim data-line-numbers="1|3">a = c(<span class="hljs-number">117</span>, <span class="hljs-number">125</span>, <span class="hljs-number">116</span>, <span class="hljs-number">113</span>, <span class="hljs-number">102</span>, <span class="hljs-number">122</span>, <span class="hljs-number">123</span>, <span class="hljs-number">93</span>, <span class="hljs-number">99</span>, <span class="hljs-number">129</span>, <span class="hljs-number">132</span>, <span class="hljs-number">94</span>, <span class="hljs-number">85</span>, <span class="hljs-number">92</span>, <span class="hljs-number">101</span>, <span class="hljs-number">83</span>, <span class="hljs-number">119</span>, <span class="hljs-number">119</span>, <span class="hljs-number">101</span>, <span class="hljs-number">97</span>)
+
+shapiro.test(a)
+                    </code></pre>
+                    <pre class="fragment"><code data-noescape data-trim class="language-plaintext">&gt; shapiro.test(<span class="hljs-keyword">a</span>)
+
+    Shapiro-Wilk normality test
+
+data:  <span class="hljs-keyword">a</span>
+W = <span class="hljs-number">0.94113</span>, p-<span class="hljs-built_in">value</span> = <span class="hljs-number">0.2518</span>
+                    </code></pre>
+                    <p>p &gt; 0.05 means data is not significantly different from normal distribution, which is what we want.</p>
+                </section>
+                <section>
+                    <p style="text-align: left;">3. Run the test</p>
+                    <pre><code data-trim class="language-r">t.test(a, mu=100)
+                    </code></pre>
+                    <pre  class="fragment"><code data-noescape data-trim class="language-plaintext">
+                        > t.test(a, mu=100)
+
+                            One Sample t-test
+
+                        data:  a
+                        t = 2.4063, df = 19, p-value = 0.02646
+                        alternative hypothesis: true mean is not equal to 100
+                        95 percent confidence interval:
+                        101.0545 115.1455
+                        sample estimates:
+                        mean of x 
+                            108.1
+                    </code></pre>
+                </section>
+                <section data-markdown data-auto-animate data-auto-animate-id="02">
+                    ### Reporting statistics
+
+                    Statistical tests need to be reported once the data have been analysed (usually in a short paragraph)
+                </section>
+                <section data-auto-animate data-auto-animate-id="02">
+                    <h3>Reporting statistics</h3>
+                    <h4>One Sample t-Test</h4>
+                    <p style="text-align: left;">A one-sample t-test was run to determine whether the mean IQ scores for students in university A (n=20) was different from the average IQ (µ=100). Sampled IQ scores were normally distributed as assessed by Shapiro-Wilk’s test (p= 0.25) and there were no outliers in the data. The group of 20 students were found to have a significantly higher IQ (M=108.1, s.d.=15.05) than the average, t(19) = 2.4, p &lt; 0.03. </p>
+                </section>
+                <section data-auto-animate data-auto-animate-id="02">
+                    <h3>Reporting statistics</h3>
+                    <h4>One Sample t-Test</h4>
+                    <p style="text-align: left;">A <strong>one-sample t-test</strong> was run to determine whether the mean IQ scores for students in university A <strong>(n=20)</strong> was different from the average IQ <strong>(µ=100)</strong>. Sampled IQ scores were <strong>normally distributed</strong> as assessed by Shapiro-Wilk’s test (p= 0.25) and there were <strong>no outliers</strong> in the data. The group of 20 students were found to have a <strong>significantly higher</strong> IQ <strong>(M=108.1, s.d.=15.05)</strong> than the average, <strong>t(19) = 2.4, p &lt; 0.03</strong>.</p>
+                </section>
+                <section>
+                    <h3 id="moving-on-to-comparing-the-mean-of-two-groups-">Moving on to comparing the mean of two groups…</h3>
+                </section>
+                <section data-markdown data-auto-animate data-auto-animate-id="03">## Independent vs. Repeated measures</section>
+                <section data-auto-animate data-auto-animate-id="03">
+                    <style>
+                        .container{
+                            display: flex;
+                        }
+                        .col{
+                            flex: 1;
+                        }
+                    </style>
+                    <h2>Independent vs. Repeated measures</h2>
+                    <div class="container">
+                        <div class="column">
+                            <strong class="fragment" data-fragment-index="1">Independent measures</strong>
+                            <ul class="fragment" data-fragment-index="2" style='font-size:80%'>
+                                <li>between-subject measures</li>
+                                <li>different participants are measured in each group/condition</li>
+                                <li>data points = the number of participants</li>
+                                <li>results in the two groups are independent from one another</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <strong class="fragment" data-fragment-index="1">Repeated measures</strong>
+                            <ul class="fragment" data-fragment-index="3" style='font-size:80%'>
+                                <li>within-subject measures</li>
+                                <li>the same participants are measured in each group/condition</li>
+                                <li>each participant is tested twice (or more)</li>
+                                <li>correlation between results</li>
+                            </ul>
+                        </div>
+                      </div>
+                </section>
+                <section data-auto-animate data-auto-animate-id="03">
+                    <style>
+                        .container{
+                            display: flex;
+                        }
+                        .col{
+                            flex: 1;
+                        }
+                    </style>
+                    <h2>Independent vs. Repeated measures</h2>
+                    <div class="container">
+                        <div class="column">
+                            <strong>Independent measures</strong>
+                            <ul class="fragment" data-fragment-index="1" style='font-size:80%'>
+                                <li>certain topics can only be investigated in independent designs</li>
+                                <li>less risk of practice or fatigue effects</li>
+                                <li>less risk of data loss due to participant drop out</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <strong>Repeated measures</strong>
+                            <ul class="fragment" data-fragment-index="2" style='font-size:80%'>
+                                <li>participants act as their own control:</li>
+                                <li>reduced level of error variance in the data</li>
+                                <li>can be quicker and cheaper to run</li>
+                            </ul>
+                        </div>
+                      </div>
+                </section>
+                <section data-markdown>
+                    ## Independent samples t-test
+                </section>
+                <section data-markdown data-auto-animate data-auto-animate-id="04">
+                    ### Assumptions of Independent samples t-test
+                </section>
+                <section data-markdown data-auto-animate data-auto-animate-id="04">
+                    ### Assumptions of Independent samples t-test
+
+                    1. Scores come from two different groups of participants 
+                    2. Scores should approximate a normal distribution
+                    3. Variances are roughly equal in the two groups 
+                    4. Data is of a continuous (interval or ratio) nature
+                </section>
+                <section data-markdown data-auto-animate data-auto-animate-id="05">
+                    ### Independent samples t-test example
+
+                    The performance of 10 children with specific language impairment is compared to 10 typically-developing aged-matched control children on a test of non-word repetition.
+                </section>
+                <section data-auto-animate data-auto-animate-id="05">
+                    <h3>Independent samples t-test example</h3>
+
+                    The t value is the difference between the two group means, divided by the standard error of the difference between the two means. 
+
+                    \[ t=\frac{M}{SE}=\frac{M_1-M_2}{\sqrt{\frac{S_1^2}{n_1}+\frac{S_2^2}{n_2}}} \]
+                </section>
+                <section>
+                    <h3 id="do-it-in-r">Do it in R: Independent samples t-test</h3>
+                    <p style="text-align: left;">1. Prepare data</p>
+                    <p style="text-align: left;">2. Test for assumptions</p>
+                    <pre><code class="language-r" data-noescape data-trim data-line-numbers="1,2,3|5,6,7,9|11">score &lt;- c(6,17,2,8,9,3,12,10,5,3, 10,14,12,9,18,16,8,20,10,11)
+group &lt;- c(&quot;SLI&quot;, &quot;SLI&quot;, &quot;SLI&quot;, &quot;SLI&quot;, &quot;SLI&quot;, &quot;SLI&quot;, &quot;SLI&quot;, &quot;SLI&quot;, &quot;SLI&quot;, &quot;SLI&quot;, &quot;TD&quot;,  &quot;TD&quot;, &quot;TD&quot;,  &quot;TD&quot;,  &quot;TD&quot;,  &quot;TD&quot;, &quot;TD&quot;,  &quot;TD&quot;,  &quot;TD&quot;,  &quot;TD&quot;)
+df &lt;- data.frame(group, score)
+
+library(car)
+qqPlot(df[df$group==&#39;SLI&#39;, &#39;score&#39;])
+qqPlot(df[df$group==&#39;TD&#39;, &#39;score&#39;])
+
+tapply(df$score, df$group, shapiro.test)
+
+leveneTest(score ~ factor(group), data = df)
+                    </code></pre>                        
+                </section>
+                <section>
+                    <p style="text-align: left;">3. Independent samples t-test</p>
+                    <pre><code class="language-r" data-noescape>t.test(score ~ group, <span class="hljs-built_in">var</span>.equal=<span class="hljs-literal">TRUE</span>, <span class="hljs-built_in">data</span> = df)
+                    </code></pre>
+
+                    <pre  class="fragment"><code class="language-plaintext" data-trim>> t.test(score ~ group, var.equal=TRUE, data = df)
+
+    Two Sample t-test
+
+data:  score by group
+t = -2.7027, df = 18, p-value = 0.01457
+alternative hypothesis: true difference in means between group SLI and group TD is not equal to 0
+95 percent confidence interval:
+    -9.419927 -1.180073
+sample estimates:
+mean in group SLI  mean in group TD 
+                7.5              12.8
+                    </code></pre>
+                </section>
+                <section data-auto-animate data-auto-animate-id="06">
+                    <h3>Report the results</h3>
+                    <p style="text-align: left;">An independent samples t-Test showed that 10 SLI children performed significantly worse [t(18)=-2.703, p=0.015] on a test of non-word repetition (M=7.5, s.d.=4.7) than 10 age-matched typically-developing controls (M=12.8, s.d.=4.05).</p>
+                </section>
+                <section data-auto-animate data-auto-animate-id="06">
+                    <h3>Report the results</h3>
+                    <p style="text-align: left;">An <strong>independent samples t-Test</strong> showed that <strong>10 SLI children</strong> performed <strong>significantly worse [t(18)=-2.703, p=0.015]</strong> on a test of non-word repetition <strong>(M=7.5, s.d.=4.7)</strong> than <strong>10 age-matched typically-developing controls (M=12.8, s.d.=4.05)</strong>.</p>
+                </section>
+                <section data-markdown data-auto-animate data-auto-animate-id="07">
+                    ## Degree of freedom
+                </section>
+                <section data-markdown data-auto-animate data-auto-animate-id="07">
+                    ## Degree of freedom
+
+                    The degree of freedom is the number of factors in a calculation that we can vary and still achieve a specific outcome. 
+                </section>
+                <section data-auto-animate data-auto-animate-id="07">
+                    <h2>Degree of freedom</h2>
+
+                    <p>The degree of freedom is the number of factors in a calculation that we can vary and still achieve a specific outcome.</p> 
+
+                    <p>\[ d.f. = n-1 \]</p>
+                </section>
+                <section data-markdown>
+                    ## Paired samples t-test
+                </section>
+                <section  data-markdown data-auto-animate data-auto-animate-id="08">
+                    ### Assumptions of the paired samples t-test
+                </section>
+                <section  data-markdown data-auto-animate data-auto-animate-id="08">
+                    ### Assumptions of the paired samples t-test
+
+                    - Data is of a continuous nature
+                    - Same participants perform in both conditions
+                        - i.e., each participant is measured twice
+                        - so typically there is a correlation between the two sets of scores
+                    - The difference in scores should approximate a normal distribution
+                </section>
+                <section>
+                    ### Paired samples t-test example
+                </section>
+
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script src="plugin/zoom/zoom.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+                // highlight: {
+                //    highlightOnLoad: false
+                //},
+				hash: true,
+				loop: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX, RevealZoom ]
+			});
+            //.then(() => {
+            //const highlight = Reveal.getPlugin( 'highlight' );
+            //highlight.highlightBlock( "1" );
+            //});
+		</script>
+	</body>
+</html>
